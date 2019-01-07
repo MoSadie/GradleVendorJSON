@@ -1,0 +1,21 @@
+plugins {
+    id 'java-gradle-plugin'
+    id 'groovy'
+}
+
+gradlePlugin {
+    plugins {
+        vendorJSONPlugin {
+            id = 'io.github.mosadie.vendorJSON'
+            implementationClass = 'io.github.mosadie.gradlevendorjson.GradleVendorJSONPlugin'
+        }
+    }
+}
+
+repositories {
+   mavenCentral();
+}
+
+dependencies {
+  implementation 'com.google.code.gson:gson:2.8.5'
+}
