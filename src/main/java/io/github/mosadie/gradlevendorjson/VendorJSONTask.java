@@ -15,7 +15,7 @@ import com.google.gson.Gson;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
 
-class VendorJSONTask extends DefaultTask {
+public class VendorJSONTask extends DefaultTask {
     String name;
     String version;
     String uuid;
