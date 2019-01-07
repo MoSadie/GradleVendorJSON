@@ -105,15 +105,15 @@ public class VendorJSONTask extends DefaultTask {
                 gvjson = gson.fromJson(reader, GVJSON.class);
             }
         } catch (FileNotFoundException e) {
-            //TODO Do something?
+            getProject().getLogger().error("An error occured while trying to access the file " + fileName + ". The file was not found. Aborting updating JSON file.");
             return;
         } catch (IOException e) {
-            //TODO Do something?
+            getProject().getLogger().error("An error occured while trying to access the file " + fileName + ". Error: "+ e.getMessage() +". Aborting updating JSON file.");
             return;
         }
         
         if (gvjson == null) {
-            //TODO Do something?
+            getProject().getLogger().error("An error occured while trying to create the data object. Aborting updating JSON file.");
             return;
         }
         
@@ -160,7 +160,7 @@ public class VendorJSONTask extends DefaultTask {
                 writer.write(gson.toJson(gvjson));
             }
         } catch (IOException e) {
-            //TODO Do something?
+            getProject().getLogger().error("Something went wrong creating the json file. Error: " + e.getMessage());
         }
     }
     
@@ -216,7 +216,7 @@ public class VendorJSONTask extends DefaultTask {
                 writer.write(gson.toJson(gvjson));
             }
         } catch (IOException e) {
-            //TODO Do something?
+            getProject().getLogger().error("Something went wrong creating the example json file. Error: " + e.getMessage());
         }
     }
 
