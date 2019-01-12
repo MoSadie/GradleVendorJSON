@@ -15,28 +15,52 @@ import com.google.gson.Gson;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
 
+/**
+ * The task that generates/updates a vendor json file.
+ */
 public class VendorJSONTask extends DefaultTask {
+    /** The name of the library. */
     String name;
+    /** The version string of the library. */
     String version;
+    /** The UUID of the library. */
     String uuid;
+    /** An array of maven repository urls to add to the robot project. */
     ArrayList<String> mavenUrls;
+    /** The URL to check for updated versions of this file at. */
     String jsonUrl;
+    /** The name of this file. */
     String fileName;
+    /** The Java dependencies. */
     ArrayList<GVJSONJavaArtifact> javaDependencies;
+    /** The JNI dependencies. */
     ArrayList<GVJSONJNIArtifact> jniDependencies;
+    /** The C++ dependencies. */
     ArrayList<GVJSONCppArtifact> cppDependencies;
     
-    Gson gson;
+    /** The Gson object to seralize and deseralize json. */
+    private Gson gson;
     
+    /** Set the default values for the fields and create the Gson object. */
     public VendorJSONTask() {
         setDefaults();
         createGson();
     }
 
+    /** 
+     * Add/updates a maven repository url in the vendor json file.
+     * @param url The maven repository's url.
+     */
     public void addMavenUrl(String url) {
         mavenUrls.add(url);
     }
     
+    /**
+     * Add/updates a Java artifact in the vendor json file.
+     * @param groupId The groupId of the artifact. (Ex. com.github.ORF-4450)
+     * @param artifactId The artifactId of the artifact. (Ex. RobotLib)
+     * @param version The version string of the artifact. (Ex. 3.0)
+     */
     public void addJavaArtifact(String groupId, String artifactId, String version) {
         GVJSONJavaArtifact javaArt = new GVJSONJavaArtifact();
         javaArt.groupId = groupId;
@@ -45,6 +69,15 @@ public class VendorJSONTask extends DefaultTask {
         javaDependencies.add(javaArt);
     }
     
+    /**
+     * Adds/updates a JNI (Java Native Interface) artifact in the vendor json file.
+     * @param groupId The groupId of the artifact. (Ex. com.github.ORF-4450)
+     * @param artifactId The artifactId of the artifact. (Ex. RobotLib-JNI)
+     * @param version The version string of the artifact. (Ex. 3.0)
+     * @param isJar Indicates if the file(s) to be downloaded is/are jar file(s).
+     * @param validPlatforms Array of valid platforms for the JNI files.
+     * @param skipInvalidPlatforms Indicates if including the JNI artfact should be skipped when buliding for an invalid platform.
+     */
     public void addJniArtifact(String groupId, String artifactId, String version, boolean isJar, String[] validPlatforms, boolean skipInvalidPlatforms) {
         GVJSONJNIArtifact jniArt = new GVJSONJNIArtifact();
         jniArt.groupId = groupId;
@@ -56,6 +89,21 @@ public class VendorJSONTask extends DefaultTask {
         jniDependencies.add(jniArt);
     }
     
+    //TODO: I'm not a C++ guy and have no clue what some of these things mean.
+
+    /**
+     * Adds/updates a C++ artifact in the vendor json file.
+     * @param groupId The groupId of the artifact. (Ex. com.github.ORF-4450)
+     * @param artifactId The artifactId of the artifact. (Ex. RobotLib-Cpp)
+     * @param version The version string of the artifact. (Ex. 3.0)
+     * @param libName The name of the library.
+     * @param configuration Honestly, no idea. Can be safely deleted from the vendor json file after initial generation.
+     * @param headerClassifier Points at a headers file? Not sure.
+     * @param sourcesClassifier Points at a sources file? Not sure.
+     * @param binaryPlatforms Array of valid platforms to include the C++ artifact for.
+     * @param skipInvalidPlatforms Indicates if the C++ artifact should be skipped when attempting to build for an invalid platform.
+     * @param sharedLibrary Indicates if the library is a shared library or not.
+     */
     public void addCppArtifact(String groupId, String artifactId, String version, String libName, String configuration, String headerClassifier, String sourcesClassifier, String[] binaryPlatforms, boolean skipInvalidPlatforms, boolean sharedLibrary) {
         GVJSONCppArtifact cppArt = new GVJSONCppArtifact();
         
@@ -75,7 +123,10 @@ public class VendorJSONTask extends DefaultTask {
         cppDependencies.add(cppArt);
     }
     
-    public void setDefaults() {
+    /** 
+     * Set the default values for the fields.
+    */
+    void setDefaults() {
         name = "";
         version = "";
         uuid = "";
@@ -88,12 +139,18 @@ public class VendorJSONTask extends DefaultTask {
         
     }
     
-    public void createGson() {
+    /**
+     * Create the Gson object to handle parsing and creating json strings.
+     */
+    void createGson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setPrettyPrinting();
         gson = gsonBuilder.create();
     }
     
+    /**
+     * Attampt to save all changes to the vendor json file to the actual file on the computer.
+     */
     @TaskAction
     public void taskAction() {
         if (!getProject().file(fileName).exists()) {
@@ -107,7 +164,7 @@ public class VendorJSONTask extends DefaultTask {
         } catch (FileNotFoundException e) {
             getProject().getLogger().error("An error occured while trying to access the file " + fileName + ". The file was not found. Aborting updating JSON file.");
             return;
-        } catch (IOException e) {
+        } catch (Exception e) {
             getProject().getLogger().error("An error occured while trying to access the file " + fileName + ". Error: "+ e.getMessage() +". Aborting updating JSON file.");
             return;
         }
@@ -164,6 +221,10 @@ public class VendorJSONTask extends DefaultTask {
         }
     }
     
+    /**
+     * Create an example vendor json file.
+     * @param file the File to create.
+     */
     private void createDefaultJsonFile(File file) {
         GVJSON gvjson = new GVJSON();
         gvjson.name = getProject().getName();
@@ -220,11 +281,21 @@ public class VendorJSONTask extends DefaultTask {
         }
     }
 
+    /**
+     * Takes a array of Strings and returns that array of Strings.
+     * Used as a bandaid for making arrays of Strings in a build.gradle file.
+     * @param a The array of Strings, just comma seperated, no [ or ].
+     * @return The array of Strings, as an array of Strings.
+     */
     public static String[] stringArray(String... a) {
         return a;
     }
 }
 
+/**
+ * A template class for the entire vendor json file,
+ * with every possible option.
+ */
 class GVJSON {
     String name;
     String version;
@@ -237,12 +308,20 @@ class GVJSON {
     GVJSONCppArtifact[] cppDependencies;
 }
 
+/**
+ * The Java artifact part of the vendor json file,
+ * with all possible options.
+ */
 class GVJSONJavaArtifact {
     String groupId;
     String artifactId;
     String version;
 }
 
+/**
+ * The JNI artifact part of the vendor json file,
+ * with all possible options.
+ */
 class GVJSONJNIArtifact {
     String groupId;
     String artifactId;
@@ -254,6 +333,10 @@ class GVJSONJNIArtifact {
     boolean skipInvalidPlatforms;
 }
 
+/**
+ * The C++ artifact part of the vendor json file,
+ * with all possible options.
+ */
 class GVJSONCppArtifact {
     String groupId;
     String artifactId;
