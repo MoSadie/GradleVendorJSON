@@ -5,8 +5,13 @@ This project is a gradle plugin designed to help generate and keep up to date [v
 It'll read the existing json file, then update the file with any values set in the vendorJSON block in the build.gradle file.
 
 ## How do I use this?
-First, you need to apply the plugin:
-`(Steps very soon)`
+First, you need to apply the plugin by adding this to the beginning of your build.gradle file:
+```groovy
+plugins {
+  // other plugins here.
+  id "io.github.mosadie.vendorJSON" version "1.0"
+}
+```
 
 Then you configure the `vendorJSON` task in your build.gradle file.
 You only have to set the values you want to change, with the exception of the file name.
