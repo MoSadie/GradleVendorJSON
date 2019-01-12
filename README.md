@@ -41,3 +41,5 @@ vendorJSON {
     // need more C++ Artifacts? Call addCppArtifact again!
 }
 ```
+
+Finally, just run the `vendorJSON` task from the command line like this: `./gradlew.bat vendorJSON` (Windows) or `gradlew vendorJSON` (Other platforms)
