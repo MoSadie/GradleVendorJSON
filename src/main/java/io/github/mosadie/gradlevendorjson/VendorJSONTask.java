@@ -25,6 +25,8 @@ public class VendorJSONTask extends DefaultTask {
     String version;
     /** The UUID of the library. */
     String uuid;
+    /** The FRC year this library is for */
+    String frcYear;
     /** An array of maven repository urls to add to the robot project. */
     ArrayList<String> mavenUrls;
     /** The URL to check for updated versions of this file at. */
@@ -130,6 +132,7 @@ public class VendorJSONTask extends DefaultTask {
         name = "";
         version = "";
         uuid = "";
+        frcYear = "";
         mavenUrls = new ArrayList<String>();
         jsonUrl = "";
         fileName = getProject().getName() + ".json";
@@ -230,6 +233,7 @@ public class VendorJSONTask extends DefaultTask {
         gvjson.name = getProject().getName();
         gvjson.version = "v0.0.0";
         gvjson.uuid = UUID.randomUUID().toString();
+        gvjson.frcYear = 2024;
         gvjson.mavenUrls = new String[] { "http://example.com" };
         gvjson.jsonUrl = "http://example.com/" + file.getName();
         gvjson.fileName = file.getName();
@@ -300,6 +304,7 @@ class GVJSON {
     String name;
     String version;
     String uuid;
+    String frcYear;
     String[] mavenUrls;
     String jsonUrl;
     String fileName;

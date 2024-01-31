@@ -1,6 +1,6 @@
 # Gradle Vendor JSON
 ## What is this?
-This project is a gradle plugin designed to help generate and keep up to date [vendor JSON files](http://wpilib.screenstepslive.com/s/currentCS/m/getting_started/l/682619-3rd-party-libraries#the_mechanism_c).
+This project is a gradle plugin designed to help generate and keep up to date [vendor JSON files](https://docs.wpilib.org/en/stable/docs/software/vscode-overview/3rd-party-libraries.html#how-does-it-work-java-c).
 
 It'll read the existing json file, then update the file with any values set in the vendorJSON block in the build.gradle file.
 
@@ -9,7 +9,7 @@ First, you need to apply the plugin by adding this to the beginning of your buil
 ```groovy
 plugins {
   // other plugins here.
-  id "io.github.mosadie.vendorJSON" version "1.0"
+  id "io.github.mosadie.vendorJSON" version "1.1"
 }
 ```
 
@@ -32,6 +32,7 @@ vendorJSON {
     uuid = "uuid"
     addMavenUrl("http://example.com/maven/")
     jsonUrl = "http://example.com/exampleJson.json"
+    frcYear = 2024
     fileName = "FileName.json"
     addJavaArtifact("the.group.id", "artifactId", "version")
     // need more Java Artifacts? Call addJavaArtifact again!
