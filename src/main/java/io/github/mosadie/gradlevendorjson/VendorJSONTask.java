@@ -233,7 +233,7 @@ public class VendorJSONTask extends DefaultTask {
         gvjson.name = getProject().getName();
         gvjson.version = "v0.0.0";
         gvjson.uuid = UUID.randomUUID().toString();
-        gvjson.frcYear = 2024;
+        gvjson.frcYear = "2024";
         gvjson.mavenUrls = new String[] { "http://example.com" };
         gvjson.jsonUrl = "http://example.com/" + file.getName();
         gvjson.fileName = file.getName();

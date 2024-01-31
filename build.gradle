@@ -1,20 +1,23 @@
 plugins {
-    id 'java-gradle-plugin'
-    id 'groovy'
-    id "com.gradle.plugin-publish" version "0.10.0"
+  id 'com.gradle.plugin-publish' version '1.2.1'
 }
 
 gradlePlugin {
-    plugins {
-        vendorJSONPlugin {
-            id = 'io.github.mosadie.vendorJSON'
-            implementationClass = 'io.github.mosadie.gradlevendorjson.GradleVendorJSONPlugin'
-        }
+  website = 'https://github.com/MoSadie/GradleVendorJSON'
+  vcsUrl = 'https://github.com/MoSadie/GradleVendorJSON'
+  plugins {
+    vendorJSONPlugin {
+      id = 'io.github.mosadie.vendorJSON'
+      implementationClass = 'io.github.mosadie.gradlevendorjson.GradleVendorJSONPlugin'
+      displayName = 'FRC Vendor JSON'
+      description = 'Helps create/update vendor json files for distrubution to FRC teams.'
+      tags.set(['frc', 'json', 'vendor'])
     }
+  }
 }
 
 repositories {
-   jcenter();
+  jcenter();
 }
 
 dependencies {
@@ -25,19 +28,3 @@ dependencies {
 // be used as your plugin version when publishing
 version = "1.1"
 group = "io.github.mosadie"
-
-// The configuration example below shows the minimum required properties
-// configured to publish your plugin to the plugin portal
-pluginBundle {
-  website = 'https://github.com/MoSadie/GradleVendorJSON'
-  vcsUrl = 'https://github.com/MoSadie/GradleVendorJSON'
-  description = 'Helps create/update vendor json files for distrubution to FRC teams.'
-  tags = ['frc', 'json', 'vendor']
-
-  plugins {
-    vendorJSONPlugin {
-      // id is captured from java-gradle-plugin configuration
-      displayName = 'FRC Vendor JSON'
-    }
-  }
-}
